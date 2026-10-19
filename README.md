@@ -19,6 +19,10 @@ What the fork carries that upstream does not, in short:
 - **A build that fails on the wrong SDK** instead of a VM that boots with no
   network at run time, and every Go file constrained to darwin so a non-darwin
   toolchain can load the module.
+- **macOS guests, unattended.** The restore image, installer and Mac
+  platform bindings zerogravity needs, and `WithMacOSGuestProvisioning`, the
+  macOS 27 API that answers Setup Assistant on the first boot after a restore
+  (account, auto-login, Remote Login), which upstream does not bind yet.
 - **Only what its consumers call.** Devices and notification channels nothing
   here uses were removed, and come back one file at a time when a consumer
   needs them.

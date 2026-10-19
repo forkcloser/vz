@@ -37,6 +37,8 @@ The reasoning and evidence for each is in [FORK.md](./FORK.md).
 | `VirtualMachine.StateChangedNotify`, `NetworkDeviceAttachmentWasDisconnected` and the `NetworkBlockDeviceStorageDeviceAttachment` family removed, with the `go-infinity-channel` dependency | initial import |
 | Every Go file constrained to `darwin` | initial import |
 | Devices no consumer uses removed: audio, clipboard, console, graphics, keyboard, pointing device, USB, disk images, the Mac platform and installer, Rosetta's directory share, the view; and upstream's tests and examples | initial import |
+| Re-added from upstream, verbatim, for macOS guests and a window: `platform*.go`, `bootloader_arm64.go`, `graphics*.go`, `keyboard*.go`, `pointing_device*.go`, `virtualization_12_arm64.{h,m}`, `virtualization_view.{h,m}`, the macOS half of `virtualization_arm64.go` (restore image, installer, hardware model, machine identifier, auxiliary storage) without `SaveMachineStateToPath` and `RestoreMachineStateFromURL`, the platform, graphics, keyboard and pointing-device setters of `configuration.go`, and `StartGraphicApplication` | macos-guest branch |
+| `WithMacOSGuestProvisioning`: the macOS 27 guest provisioning API (`VZMacGuestProvisioningOptions` on the start options), which upstream does not bind; soft SDK gate, `ErrProvisioningSDK` on an older SDK | macos-guest branch |
 | `vmnet.NewPerVM`: one vmnet network per VM with derived gateway and guest addressing (from ossein `pkg/vm/network.go`) | initial import |
 | `VsockConnect`, `VsockConnectRetry`, `VsockListen` over the VM's first socket device (from ossein `pkg/vm/vm.go`) | initial import |
 
