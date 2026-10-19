@@ -7,6 +7,7 @@
 #import "internal/osversion/virtualization_helper.h"
 #import <Availability.h>
 #import <Virtualization/Virtualization.h>
+#import "virtualization_view.h"
 
 bool vmCanStop(void *machine, void *queue);
 void stopWithCompletionHandler(void *machine, void *queue, uintptr_t cgoHandle);

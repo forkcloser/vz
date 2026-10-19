@@ -233,3 +233,30 @@ non-darwin toolchain from compiling the `import "C"` preamble). Without the
 constraint, `go vet`, `golangci-lint` and `go test ./...` on the linux and
 windows legs fail on `Foundation/Foundation.h: No such file or directory`.
 A refresh from upstream must re-apply the tag.
+
+## macOS guests, re-added one file at a time
+
+zerogravity installs and boots macOS guests, which ossein never did, so the
+bindings the strip took out came back from upstream at the fork point,
+verbatim and file by file, with the darwin build tag: the Mac platform
+(hardware model, machine identifier, auxiliary storage, platform
+configuration), the macOS boot loader, the restore image and installer half of
+`virtualization_arm64.go`, the graphics device and display, keyboard and
+trackpad, the window (`virtualization_view.{h,m}`, `StartGraphicApplication`)
+and the four configuration setters that attach them. Two things stayed out on
+purpose: `SaveMachineStateToPath` and `RestoreMachineStateFromURL`, since
+suspend is out of scope, and every device nothing calls (audio, console, USB,
+NBD, Rosetta's share). A re-added file is upstream's byte for byte, so the
+patch set against upstream stays a list of file names.
+
+## Guest provisioning (macOS 27), a soft SDK gate
+
+`WithMacOSGuestProvisioning` binds `VZMacGuestProvisioningOptions` on the
+macOS start options, the macOS 27 API that answers Setup Assistant on the
+first boot after a restore; upstream has no binding yet. Unlike the vmnet
+gate, the SDK gate here is soft: `INCLUDE_TARGET_OSX_27` is defined only when
+the SDK is 27 or newer, and the Go side asks the C side whether the calls were
+compiled in, returning `ErrProvisioningSDK` otherwise. The hard gate was right
+for vmnet because every consumer's networking depends on it; provisioning is
+one option one consumer uses, and a consumer that never calls it must still
+build on a macOS 26 runner.

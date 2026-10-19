@@ -163,6 +163,61 @@ func (v *VirtualMachineConfiguration) SocketDevices() []SocketDeviceConfiguratio
 	return socketDevices
 }
 
+// SetPlatformVirtualMachineConfiguration sets the hardware platform to use. Defaults to GenericPlatformConfiguration.
+//
+// This is only supported on macOS 12 and newer. Older versions do nothing.
+func (v *VirtualMachineConfiguration) SetPlatformVirtualMachineConfiguration(c PlatformConfiguration) {
+	if err := macOSAvailable(12); err != nil {
+		return
+	}
+	C.setPlatformVZVirtualMachineConfiguration(objc.Ptr(v), objc.Ptr(c))
+}
+
+// SetGraphicsDevicesVirtualMachineConfiguration sets list of graphics devices. Empty by default.
+//
+// This is only supported on macOS 12 and newer. Older versions do nothing.
+func (v *VirtualMachineConfiguration) SetGraphicsDevicesVirtualMachineConfiguration(cs []GraphicsDeviceConfiguration) {
+	if err := macOSAvailable(12); err != nil {
+		return
+	}
+	ptrs := make([]objc.NSObject, len(cs))
+	for i, val := range cs {
+		ptrs[i] = val
+	}
+	array := objc.ConvertToNSMutableArray(ptrs)
+	C.setGraphicsDevicesVZVirtualMachineConfiguration(objc.Ptr(v), objc.Ptr(array))
+}
+
+// SetKeyboardsVirtualMachineConfiguration sets list of keyboards. Empty by default.
+//
+// This is only supported on macOS 12 and newer. Older versions do nothing.
+func (v *VirtualMachineConfiguration) SetKeyboardsVirtualMachineConfiguration(cs []KeyboardConfiguration) {
+	if err := macOSAvailable(12); err != nil {
+		return
+	}
+	ptrs := make([]objc.NSObject, len(cs))
+	for i, val := range cs {
+		ptrs[i] = val
+	}
+	array := objc.ConvertToNSMutableArray(ptrs)
+	C.setKeyboardsVZVirtualMachineConfiguration(objc.Ptr(v), objc.Ptr(array))
+}
+
+// SetPointingDevicesVirtualMachineConfiguration sets list of pointing devices. Empty by default.
+//
+// This is only supported on macOS 12 and newer. Older versions do nothing.
+func (v *VirtualMachineConfiguration) SetPointingDevicesVirtualMachineConfiguration(cs []PointingDeviceConfiguration) {
+	if err := macOSAvailable(12); err != nil {
+		return
+	}
+	ptrs := make([]objc.NSObject, len(cs))
+	for i, val := range cs {
+		ptrs[i] = val
+	}
+	array := objc.ConvertToNSMutableArray(ptrs)
+	C.setPointingDevicesVZVirtualMachineConfiguration(objc.Ptr(v), objc.Ptr(array))
+}
+
 // SetStorageDevicesVirtualMachineConfiguration sets list of disk devices. Empty by default.
 func (v *VirtualMachineConfiguration) SetStorageDevicesVirtualMachineConfiguration(cs []StorageDeviceConfiguration) {
 	ptrs := make([]objc.NSObject, len(cs))

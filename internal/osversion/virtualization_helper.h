@@ -67,6 +67,15 @@ NSFileHandle *newFileHandleDupFd(int fileDescriptor, void **error);
 #error "ossein requires the macOS 26 SDK or newer (vmnet_network_* networking). Update Xcode / Command Line Tools."
 #endif
 
+// for macOS 27 API
+//
+// FORK: a soft gate, unlike the one above. Guest provisioning is one option
+// one consumer uses; a build on an older SDK compiles it out and the Go side
+// returns ErrProvisioningSDK, so nothing raises at run time.
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 270000
+#define INCLUDE_TARGET_OSX_27 1
+#endif
+
 static inline int mac_os_x_version_max_allowed()
 {
 #ifdef __MAC_OS_X_VERSION_MAX_ALLOWED

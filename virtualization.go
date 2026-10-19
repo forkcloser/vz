@@ -406,3 +406,31 @@ func emitAttachmentWasDisconnected(index C.int, errPtr unsafe.Pointer, cgoHandle
 
 //export closeAttachmentWasDisconnectedChannel
 func closeAttachmentWasDisconnectedChannel(cgoHandleUintptr C.uintptr_t) {}
+
+// StartGraphicApplication starts an application to display graphics of the VM.
+//
+// You must to call runtime.LockOSThread before calling this method.
+//
+// This is only supported on macOS 12 and newer, error will be returned on older versions.
+func (v *VirtualMachine) StartGraphicApplication(width, height float64, opts ...StartGraphicApplicationOption) error {
+	if err := macOSAvailable(12); err != nil {
+		return err
+	}
+	defaultOpts := &startGraphicApplicationOptions{}
+	for _, opt := range opts {
+		if err := opt(defaultOpts); err != nil {
+			return err
+		}
+	}
+	windowTitle := charWithGoString(defaultOpts.title)
+	defer windowTitle.Free()
+	C.startVirtualMachineWindow(
+		objc.Ptr(v),
+		v.dispatchQueue,
+		C.double(width),
+		C.double(height),
+		windowTitle.CString(),
+		C.bool(defaultOpts.enableController),
+	)
+	return nil
+}

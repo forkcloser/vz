@@ -13,7 +13,7 @@ golangci:
         # each finding fixed, silenced inline with its reason, or raised as a
         # rule; the block is deleted with its last entry. The files this fork
         # added (vsock.go, vmnet/pervm.go) are not under it.
-        - path: ^(bootloader|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$|^internal/|^vmnet/vmnet_darwin\.go$
+        - path: ^(bootloader|bootloader_arm64|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|graphics|graphics_arm64|keyboard|keyboard_arm64|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|platform|platform_arm64|pointing_device|pointing_device_arm64|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$|^internal/|^vmnet/vmnet_darwin\.go$
           linters:
             - bodyclose
             - embeddedstructfieldcheck
@@ -38,6 +38,13 @@ golangci:
             - varnamelen
             - wrapcheck
             - wsl_v5
+        # gocritic reads the cgo-rewritten source of this file and reports
+        # identifiers that do not exist in it (uncheckedInlineErr on "nsP",
+        # dupSubExpr on a line with one operand); the other linters read the
+        # file as written and stay on.
+        - path: ^provisioning_arm64\.go$
+          linters:
+            - gocritic
     settings:
       depguard:
         rules:
@@ -53,6 +60,6 @@ golangci:
         # The files that came from upstream keep upstream's formatting: a
         # reformat would make every diff against upstream unreadable and be
         # undone on each refresh (UPSTREAM.md). Not a backlog: a decision.
-        - ^(bootloader|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$
+        - ^(bootloader|bootloader_arm64|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|graphics|graphics_arm64|keyboard|keyboard_arm64|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|platform|platform_arm64|pointing_device|pointing_device_arm64|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$
         - ^internal/
         - ^vmnet/vmnet_darwin\.go$
