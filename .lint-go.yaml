@@ -1,0 +1,58 @@
+# This project's carve-outs from the Go lint baseline (.limen/lint-go.yaml):
+# the baseline's sections, in its shape, holding only what this project adds,
+# changes or takes out (book/per-language.md, "one baseline, per-project
+# carve-outs"). `just do lint go` renders the two on every run.
+golangci:
+  linters:
+    exclusions:
+      rules:
+        # ONBOARDING BACKLOG (book/forks.md, "enrolment, green from day one").
+        # Findings on the files that came from upstream Code-Hex/vz, not yet
+        # read: every entry below records a finding not yet judged, never a
+        # decision that the code is right. Emptied one linter per pull request,
+        # each finding fixed, silenced inline with its reason, or raised as a
+        # rule; the block is deleted with its last entry. The files this fork
+        # added (vsock.go, vmnet/pervm.go) are not under it.
+        - path: ^(bootloader|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$|^internal/|^vmnet/vmnet_darwin\.go$
+          linters:
+            - bodyclose
+            - embeddedstructfieldcheck
+            - err113
+            - errcheck
+            - errname
+            - errorlint
+            - funcorder
+            - gochecknoglobals
+            - gocritic
+            - godot
+            - inamedparam
+            - intrange
+            - misspell
+            - mnd
+            - modernize
+            - perfsprint
+            - revive
+            - unconvert
+            - unused
+            - usestdlibvars
+            - varnamelen
+            - wrapcheck
+            - wsl_v5
+    settings:
+      depguard:
+        rules:
+          main:
+            allow:
+              # The binding's own two dependencies, upstream's: semver for the
+              # host's macOS version gate, unix for the vmnet file descriptors.
+              - golang.org/x/mod/semver
+              - golang.org/x/sys/unix
+  formatters:
+    exclusions:
+      paths:
+        # The files that came from upstream keep upstream's formatting: a
+        # reformat would make every diff against upstream unreadable and be
+        # undone on each refresh (UPSTREAM.md). Not a backlog: a decision.
+        - ^(bootloader|cgoutil|configuration|configuration_arm64|entropy|errorcode_string|linuxrosettaavailability_string_arm64|memory_balloon|network|osversion_alias|serial_console|shared_directory|shared_directory_arm64|socket|storage|virtualization|virtualization_arm64|virtualmachinestate_string|vzerror)\.go$
+        - ^internal/
+        - ^vmnet/vmnet_darwin\.go$
