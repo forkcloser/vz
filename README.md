@@ -1,7 +1,7 @@
 # vz
 
 Go binding for Apple's [Virtualization.framework], forked from
-[Code-Hex/vz] for the hosts [ossein] and [zerogravity] run on: Apple silicon,
+[Code-Hex/vz] for the hosts [ossein] and zerogravity run on: Apple silicon,
 the current macOS, darwin only.
 
 What the fork carries that upstream does not, in short:
@@ -45,5 +45,4 @@ Every workflow runs through `just`: `just lint`, `just test`, `just fix`;
 [Virtualization.framework]: https://developer.apple.com/documentation/virtualization
 [Code-Hex/vz]: https://github.com/Code-Hex/vz
 [ossein]: https://github.com/farcloser/ossein
-[zerogravity]: https://github.com/farcloser/zerogravity
 [#205]: https://github.com/Code-Hex/vz/pull/205
