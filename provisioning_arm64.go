@@ -57,7 +57,7 @@ func WithMacOSGuestProvisioning(provisioning MacGuestProvisioningOptions) Virtua
 			return err
 		}
 
-		if !bool(C.vzMacGuestProvisioningCompiled()) {
+		if !provisioningCompiled() {
 			return ErrProvisioningSDK
 		}
 
@@ -93,4 +93,10 @@ func WithMacOSGuestProvisioning(provisioning MacGuestProvisioningOptions) Virtua
 
 		return nil
 	}
+}
+
+// provisioningCompiled reports whether the SDK this binary was built against
+// had the provisioning calls; the C side knows, the Go side asks.
+func provisioningCompiled() bool {
+	return bool(C.vzMacGuestProvisioningCompiled())
 }
