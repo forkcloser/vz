@@ -1,0 +1,13 @@
+virtualization
+*.log
+.envrc
+.env
+RestoreImage.ipsw
+testdata/*
+!testdata/.gitkeep
+
+# Required by limen (book/mandatory-files.md, ".gitignore").
+/.build
+/_scratch
+.claude
+.idea
