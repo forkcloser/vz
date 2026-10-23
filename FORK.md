@@ -133,6 +133,16 @@ Each edit is marked `OSSEIN FORK` in the source.
    over code nobody is reviewing.
 7. **Stripped to the bone** — see below.
 8. **Legacy `// +build` lines dropped.** Only toolchains before Go 1.17 read them.
+9. **`virtualization_11.m`, `socket.go` — the vsock descriptor is duplicated
+   before Go takes it.** `VZVirtioSocketConnection` owns its file descriptor
+   and closes it when the object is destroyed (the SDK header says so). The
+   flat conversion handed Go that very descriptor, Go made its `net.FileConn`
+   copy and closed the original, and the framework's later close hit whatever
+   number the kernel had reused in between: in zerogravity the agent's HTTP
+   connection, cut mid-request tens of seconds after the vsock dial. The
+   conversion now hands Go a `dup`, or -1 with errno, and Go's close is of
+   its own copy. Upstream fixed the same thing after our fork point
+   (`SocketConnectionDuplicatedFileDescriptor`).
 
 ## What was stripped, and why
 

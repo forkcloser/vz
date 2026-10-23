@@ -827,7 +827,10 @@ VZVirtioSocketConnectionFlat convertVZVirtioSocketConnection2Flat(void *connecti
         VZVirtioSocketConnectionFlat ret;
         ret.sourcePort = [(VZVirtioSocketConnection *)connection sourcePort];
         ret.destinationPort = [(VZVirtioSocketConnection *)connection destinationPort];
-        ret.fileDescriptor = [(VZVirtioSocketConnection *)connection fileDescriptor];
+        // OSSEIN FORK: the descriptor is owned by the VZVirtioSocketConnection and closed
+        // when that object is destroyed (VZVirtioSocketConnection.h); Go gets
+        // a duplicate of its own, or -1 with errno when dup fails.
+        ret.fileDescriptor = dup([(VZVirtioSocketConnection *)connection fileDescriptor]);
         return ret;
     }
 

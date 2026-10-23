@@ -357,7 +357,13 @@ type VirtioSocketConnection struct {
 var _ net.Conn = (*VirtioSocketConnection)(nil)
 
 func newVirtioSocketConnection(ptr unsafe.Pointer) (*VirtioSocketConnection, error) {
-	vzVirtioSocketConnection := C.convertVZVirtioSocketConnection2Flat(ptr)
+	vzVirtioSocketConnection, errno := C.convertVZVirtioSocketConnection2Flat(ptr)
+	if vzVirtioSocketConnection.fileDescriptor < 0 {
+		return nil, fmt.Errorf("vsock connection: duplicating the descriptor: %w", errno)
+	}
+
+	// OSSEIN FORK: the duplicate is ours: net.FileConn takes a copy of its own, and the
+	// framework closes the original with its connection object.
 	file := os.NewFile((uintptr)(vzVirtioSocketConnection.fileDescriptor), "")
 	defer file.Close()
 	rawConn, err := net.FileConn(file)
