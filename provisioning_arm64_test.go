@@ -18,7 +18,11 @@ import (
 func TestProvisioningGateOrder(t *testing.T) {
 	t.Parallel()
 
+	// Complete values: on a macOS 27 host with the macOS 27 SDK the option
+	// reaches the framework, which validates them (an empty full name is
+	// refused), and that refusal is not the gate under test.
 	option := vz.WithMacOSGuestProvisioning(vz.MacGuestProvisioningOptions{
+		FullName: "Zero Gravity",
 		Username: "zg",
 		Password: "secret",
 	})

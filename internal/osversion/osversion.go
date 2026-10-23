@@ -113,6 +113,8 @@ func MacOSBuildTargetAvailable(version float64) error {
 		target = 150400 // __MAC_15_4
 	case 26:
 		target = 260000 // __MAC_26_0
+	case 27:
+		target = 270000 // __MAC_27_0
 	default:
 		return fmt.Errorf("unsupported target version %.1f: %w", version, ErrBuildTargetOSVersion)
 	}
